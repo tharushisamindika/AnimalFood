@@ -1,0 +1,190 @@
+{
+    "timestamp": "2025-08-11 18:00:34",
+    "summary": {
+        "total_tests": 29,
+        "passed": 28,
+        "failed": 1
+    },
+    "results": [
+        {
+            "test": "Database Connection",
+            "passed": false,
+            "message": "SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for ${APP_NAME} failed: No such host is known. ",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": ".env file exists",
+            "passed": true,
+            "message": "Found",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "ENV: APP_KEY",
+            "passed": true,
+            "message": "Set",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "ENV: DB_DATABASE",
+            "passed": true,
+            "message": "Set",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "ENV: DB_USERNAME",
+            "passed": true,
+            "message": "Set",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "App Key Valid",
+            "passed": true,
+            "message": "Application encryption key status",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Route: \/login",
+            "passed": true,
+            "message": "HTTP 200 - Login page",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Route: \/admin\/categories",
+            "passed": true,
+            "message": "HTTP 302 - Categories management",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Route: \/admin\/products",
+            "passed": true,
+            "message": "HTTP 302 - Products management",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Route: \/admin\/users",
+            "passed": true,
+            "message": "HTTP 302 - Users management",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Route: \/register",
+            "passed": true,
+            "message": "HTTP 302 - Registration page (requires auth)",
+            "timestamp": "2025-08-11 18:00:32"
+        },
+        {
+            "test": "Login page accessible",
+            "passed": true,
+            "message": "Login form should be accessible",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Registration requires auth",
+            "passed": true,
+            "message": "Should redirect unauthenticated users",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Protected route: \/admin\/categories",
+            "passed": true,
+            "message": "Should redirect to login",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Protected route: \/admin\/products",
+            "passed": true,
+            "message": "Should redirect to login",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Protected route: \/admin\/users",
+            "passed": true,
+            "message": "Should redirect to login",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Category validation endpoint",
+            "passed": true,
+            "message": "Validation endpoint accessible",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Category route: GET \/admin\/categories",
+            "passed": true,
+            "message": "Category list",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Category route: GET \/admin\/categories\/get\/all",
+            "passed": true,
+            "message": "Category API",
+            "timestamp": "2025-08-11 18:00:33"
+        },
+        {
+            "test": "Product route: GET \/admin\/products",
+            "passed": true,
+            "message": "Product list",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "Product route: GET \/admin\/products\/create",
+            "passed": true,
+            "message": "Product creation form",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "Empty name validation",
+            "passed": true,
+            "message": "Validation endpoint response",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "Valid name validation",
+            "passed": true,
+            "message": "Validation endpoint response",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "Long name validation",
+            "passed": true,
+            "message": "Validation endpoint response",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "UI: Tailwind CSS",
+            "passed": true,
+            "message": "User interface component check",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "UI: Form elements",
+            "passed": true,
+            "message": "User interface component check",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "UI: CSRF protection",
+            "passed": true,
+            "message": "User interface component check",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "UI: Dark mode support",
+            "passed": true,
+            "message": "User interface component check",
+            "timestamp": "2025-08-11 18:00:34"
+        },
+        {
+            "test": "UI: Responsive design",
+            "passed": true,
+            "message": "User interface component check",
+            "timestamp": "2025-08-11 18:00:34"
+        }
+    ],
+    "system_info": {
+        "php_version": "8.3.14",
+        "os": "WINNT",
+        "server_software": "Unknown",
+        "base_url": "http:\/\/127.0.0.1:8000"
+    }
+}

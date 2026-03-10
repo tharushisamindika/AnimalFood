@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 3px; font-family: monospace; max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Animal Food System - Billing Functionality Test</h1>
+    
+    <div class="test-section">
+        <h3>Test 1: Load Customers</h3>
+        <button onclick="testCustomers()">Test Load Customers</button>
+        <div id="customers-result" class="log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 2: Load Products</h3>
+        <button onclick="testProducts()">Test Load Products</button>
+        <div id="products-result" class="log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3: Test Bill Header</h3>
+        <button onclick="testBillHeader()">Test Bill Header</button>
+        <div id="header-result" class="log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 4: Test CSRF Token</h3>
+        <button onclick="testCSRF()">Test CSRF</button>
+        <div id="csrf-result" class="log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 5: Simulate Bill Creation</h3>
+        <button onclick="testBillCreation()">Test Create Bill</button>
+        <div id="bill-result" class="log"></div>
+    </div>
+
+    <script>
+        function log(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const color = isError ? 'red' : 'green';
+            element.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            element.scrollTop = element.scrollHeight;
+        }
+        
+        async function testCustomers() {
+            const resultDiv = document.getElementById('customers-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                log('customers-result', 'Testing customer endpoint...');
+                const response = await fetch('/admin/billing/customers');
+                log('customers-result', `Response status: ${response.status}`);
+                
+                if (response.ok) {
+                    const customers = await response.json();
+                    log('customers-result', `Found ${customers.length} customers`);
+                    if (customers.length > 0) {
+                        log('customers-result', `First customer: ${customers[0].name}`);
+                    }
+                    log('customers-result', 'Customer test PASSED ✓');
+                } else {
+                    log('customers-result', `Error: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                log('customers-result', `Error: ${error.message}`, true);
+            }
+        }
+        
+        async function testProducts() {
+            const resultDiv = document.getElementById('products-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                log('products-result', 'Testing products endpoint...');
+                const response = await fetch('/admin/billing/products');
+                log('products-result', `Response status: ${response.status}`);
+                
+                if (response.ok) {
+                    const products = await response.json();
+                    log('products-result', `Found ${products.length} products`);
+                    if (products.length > 0) {
+                        log('products-result', `First product: ${products[0].name} - Rs. ${products[0].price}`);
+                    }
+                    log('products-result', 'Products test PASSED ✓');
+                } else {
+                    log('products-result', `Error: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                log('products-result', `Error: ${error.message}`, true);
+            }
+        }
+        
+        async function testBillHeader() {
+            const resultDiv = document.getElementById('header-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                log('header-result', 'Testing bill header endpoint...');
+                const response = await fetch('/admin/settings/bill-header/active');
+                log('header-result', `Response status: ${response.status}`);
+                
+                if (response.ok) {
+                    const header = await response.json();
+                    if (header) {
+                        log('header-result', `Company: ${header.company_name}`);
+                        log('header-result', `Invoice prefix: ${header.invoice_prefix}`);
+                    } else {
+                        log('header-result', 'No active bill header found');
+                    }
+                    log('header-result', 'Bill header test PASSED ✓');
+                } else {
+                    log('header-result', `Error: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                log('header-result', `Error: ${error.message}`, true);
+            }
+        }
+        
+        async function testCSRF() {
+            const resultDiv = document.getElementById('csrf-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                log('csrf-result', 'Getting CSRF token...');
+                const response = await fetch('/admin/billing');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const token = doc.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                
+                if (token) {
+                    log('csrf-result', `CSRF token found: ${token.substring(0, 10)}...`);
+                    log('csrf-result', 'CSRF test PASSED ✓');
+                } else {
+                    log('csrf-result', 'CSRF token not found', true);
+                }
+            } catch (error) {
+                log('csrf-result', `Error: ${error.message}`, true);
+            }
+        }
+        
+        async function testBillCreation() {
+            const resultDiv = document.getElementById('bill-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                log('bill-result', 'Testing bill creation endpoint...');
+                
+                // First get CSRF token
+                const response = await fetch('/admin/billing');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const token = doc.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                
+                if (!token) {
+                    log('bill-result', 'Could not get CSRF token', true);
+                    return;
+                }
+                
+                const billData = {
+                    customer_id: 1,
+                    items: [
+                        {
+                            product_id: 1,
+                            quantity: 2
+                        }
+                    ],
+                    total_amount: 100.00,
+                    tax_amount: 10.00,
+                    discount_amount: 0.00,
+                    final_amount: 110.00,
+                    paid_amount: 110.00,
+                    due_amount: 0.00,
+                    payment_method: 'cash',
+                    notes: 'Test bill from test page'
+                };
+                
+                log('bill-result', 'Sending bill creation request...');
+                const createResponse = await fetch('/admin/billing/api/create-bill', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(billData)
+                });
+                
+                log('bill-result', `Create response status: ${createResponse.status}`);
+                
+                if (createResponse.ok) {
+                    const result = await createResponse.json();
+                    if (result.success) {
+                        log('bill-result', `Bill created successfully: ${result.bill.invoice_number}`);
+                        log('bill-result', `Customer: ${result.bill.customer_name}`);
+                        log('bill-result', `Amount: Rs. ${result.bill.amount}`);
+                        log('bill-result', 'Bill creation test PASSED ✓');
+                    } else {
+                        log('bill-result', `Bill creation failed: ${result.error}`, true);
+                    }
+                } else {
+                    const errorText = await createResponse.text();
+                    log('bill-result', `Error: ${createResponse.status} ${createResponse.statusText}`, true);
+                    log('bill-result', `Error details: ${errorText}`, true);
+                }
+            } catch (error) {
+                log('bill-result', `Error: ${error.message}`, true);
+            }
+        }
+        
+        // Auto-run basic tests on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                testCustomers();
+                setTimeout(() => testProducts(), 1000);
+                setTimeout(() => testBillHeader(), 2000);
+                setTimeout(() => testCSRF(), 3000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
